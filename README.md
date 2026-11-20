@@ -46,7 +46,7 @@ dotnet run --project CubicLauncher.App
 
 ## Сборки и публикация
 
-[GitHub Actions](.github/workflows/build.yml) собирает и тестирует решение для Windows x64, Linux x64, macOS ARM64 и macOS Intel. После успешной сборки установщики и архивы `CubicLauncher-*` доступны в разделе **Artifacts** соответствующего запуска Actions; тег `vX.Y.Z` запускает создание GitHub Release **после успеха всех четырёх сборок**. Windows получает установщик Inno Setup и portable ZIP, Linux — `tar.gz`, macOS — отдельный DMG для каждой архитектуры. Публикация добавляет `SHA256SUMS.txt`. macOS-пакеты имеют ad-hoc подпись без Developer ID и нотарификации; Windows-установщик не подписан. Для повседневной поставки следует настроить подпись и нотарификацию.
+[GitHub Actions](.github/workflows/build.yml) собирает и тестирует решение для Windows x64, Linux x64, macOS ARM64 и macOS Intel. После успешной сборки установщики и архивы `CubicLauncher-*` доступны в разделе **Artifacts** соответствующего запуска Actions; тег `vX.Y.Z` запускает создание GitHub Release **после успеха всех четырёх сборок**. Windows получает установщик Inno Setup и portable ZIP, Linux — `tar.gz`, macOS — отдельный DMG для каждой архитектуры. Публикация добавляет `SHA256SUMS.txt`. На macOS CI проверяет архитектуру исполняемого файла, подпись приложения и целостность DMG перед загрузкой артефакта. При сбое создания или проверки образа выполняются до трёх попыток. macOS-пакеты имеют ad-hoc подпись без Developer ID и нотарификации; Windows-установщик не подписан. Для повседневной поставки следует настроить подпись и нотарификацию.
 
 ## Границы реализации и проверки
 
