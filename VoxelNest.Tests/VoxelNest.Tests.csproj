@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsTestProject>true</IsTestProject>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../VoxelNest.App/VoxelNest.App.csproj" />
+    <ProjectReference Include="../VoxelNest.Core/VoxelNest.Core.csproj" />
+    <ProjectReference Include="../VoxelNest.Infrastructure/VoxelNest.Infrastructure.csproj" />
+    <ProjectReference Include="../VoxelNest.Launcher/VoxelNest.Launcher.csproj" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="Avalonia.Headless.XUnit" />
+    <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

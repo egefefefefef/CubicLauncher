@@ -1,0 +1,89 @@
+name: Build, test and package
+on:
+  push:
+    branches: ['**']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.rid }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2022
+            rid: win-x64
+          - os: ubuntu-24.04
+            rid: linux-x64
+          - os: macos-15
+            rid: osx-arm64
+          - os: macos-15-intel
+            rid: osx-x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Set version
+        shell: bash
+        run: |
+          version=0.1.0
+          if [[ "$GITHUB_REF_TYPE" == tag ]]; then version=${GITHUB_REF_NAME#v}; fi
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          echo "PACKAGE_VERSION=$version" >> "$GITHUB_ENV"
+      - run: dotnet build VoxelNest.sln -c Release -p:Version=${{ env.PACKAGE_VERSION }}
+      - run: dotnet test VoxelNest.sln -c Release --no-build --logger trx
+      - run: dotnet publish VoxelNest.App -c Release -r ${{ matrix.rid }} --self-contained -p:Version=${{ env.PACKAGE_VERSION }} -o build/publish
+      - if: runner.os == 'Windows'
+        name: Windows installer and portable ZIP
+        shell: pwsh
+        run: |
+          New-Item artifacts -ItemType Directory -Force | Out-Null
+          Compress-Archive -Path build/publish/* -DestinationPath artifacts/VoxelNest-win-x64-portable.zip
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (!(Test-Path $iscc)) {
+            choco install innosetup --yes --no-progress
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+          & $iscc "/DPublishDir=$($PWD.Path)\build\publish" "/DAppVersion=$env:PACKAGE_VERSION" "/O$($PWD.Path)\artifacts" packaging/Windows.iss
+          exit $LASTEXITCODE
+      - if: runner.os == 'Linux'
+        name: Linux tar.gz
+        run: |
+          mkdir -p artifacts
+          tar -czf artifacts/VoxelNest-linux-x64.tar.gz --transform='s,^publish,VoxelNest,' -C build publish
+      - if: runner.os == 'macOS'
+        name: macOS DMG
+        run: bash packaging/macos.sh build/publish ${{ matrix.rid }} "$PACKAGE_VERSION"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: VoxelNest-${{ matrix.rid }}
+          path: artifacts/*
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: VoxelNest-*
+          path: artifacts
+          merge-multiple: true
+      - name: Publish release with checksums
+        shell: bash
+        run: |
+          (cd artifacts && sha256sum -- VoxelNest-* > SHA256SUMS.txt)
+          gh release create "$GITHUB_REF_NAME" --verify-tag --generate-notes artifacts/*

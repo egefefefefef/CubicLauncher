@@ -1,0 +1,42 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoxelNest.App", "VoxelNest.App\VoxelNest.App.csproj", "{EC6B5F85-540C-59D8-8192-BB636A3E82BD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoxelNest.Core", "VoxelNest.Core\VoxelNest.Core.csproj", "{58761ACE-6564-5C68-9250-5FC586B4A30D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoxelNest.Launcher", "VoxelNest.Launcher\VoxelNest.Launcher.csproj", "{F6304687-24D2-5089-9D22-F770A487FE5C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoxelNest.Infrastructure", "VoxelNest.Infrastructure\VoxelNest.Infrastructure.csproj", "{8FC1147D-44B5-5BA7-A731-B246BF1F64D5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoxelNest.Tests", "VoxelNest.Tests\VoxelNest.Tests.csproj", "{E0C279BA-9CCD-5F0D-A2B4-036A8216AFD0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC6B5F85-540C-59D8-8192-BB636A3E82BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC6B5F85-540C-59D8-8192-BB636A3E82BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC6B5F85-540C-59D8-8192-BB636A3E82BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC6B5F85-540C-59D8-8192-BB636A3E82BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58761ACE-6564-5C68-9250-5FC586B4A30D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58761ACE-6564-5C68-9250-5FC586B4A30D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58761ACE-6564-5C68-9250-5FC586B4A30D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58761ACE-6564-5C68-9250-5FC586B4A30D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6304687-24D2-5089-9D22-F770A487FE5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6304687-24D2-5089-9D22-F770A487FE5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6304687-24D2-5089-9D22-F770A487FE5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6304687-24D2-5089-9D22-F770A487FE5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FC1147D-44B5-5BA7-A731-B246BF1F64D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FC1147D-44B5-5BA7-A731-B246BF1F64D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FC1147D-44B5-5BA7-A731-B246BF1F64D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FC1147D-44B5-5BA7-A731-B246BF1F64D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0C279BA-9CCD-5F0D-A2B4-036A8216AFD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0C279BA-9CCD-5F0D-A2B4-036A8216AFD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0C279BA-9CCD-5F0D-A2B4-036A8216AFD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0C279BA-9CCD-5F0D-A2B4-036A8216AFD0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
