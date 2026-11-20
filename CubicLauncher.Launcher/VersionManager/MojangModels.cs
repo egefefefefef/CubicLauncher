@@ -10,7 +10,7 @@ public sealed record VersionEntry(string Id, string Type, string Url, string? Sh
 
 internal sealed record VersionManifest(List<VersionEntry> Versions);
 public sealed record Artifact(string Url, string? Sha1, long Size, string? Path);
-public sealed record JavaRequirement(int MajorVersion);
+public sealed record JavaRequirement(int MajorVersion, string? Component = null);
 public sealed record PlatformRule(string Action, RuleOs? Os, Dictionary<string, bool>? Features);
 public sealed record RuleOs(string? Name, string? Arch, string? Version);
 public sealed record ExtractionRules(List<string>? Exclude);

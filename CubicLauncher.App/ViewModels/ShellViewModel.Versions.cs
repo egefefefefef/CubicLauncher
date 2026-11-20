@@ -52,7 +52,7 @@ public sealed partial class ShellViewModel
         ? "ChooseToStart" : _isSelectedInstalled ? "Installed" : "NotInstalled"];
     public double DownloadPercent => CurrentProgress?.Percent ?? 0;
     public string DownloadMetrics => CurrentProgress is { } p
-        ? L.Format("TransferMetrics", p.FilesDone, p.FilesTotal, FormatBytes(p.BytesRemaining), FormatBytes((long)p.BytesPerSecond)) : "";
+        ? p.Phase is { } phase ? L[phase] : L.Format("TransferMetrics", p.FilesDone, p.FilesTotal, FormatBytes(p.BytesRemaining), FormatBytes((long)p.BytesPerSecond)) : "";
     public string DownloadSummary => _lastDownload is null ? L[DownloadStateKey] : $"{_lastLoaderRecipe?.Id ?? _lastDownload.Id}  •  {L[DownloadStateKey]}";
     public bool CanRetryDownload => CanEdit && _downloadCanRetry;
     public bool CanPrimary => CanEdit;
@@ -232,8 +232,9 @@ public sealed partial class ShellViewModel
         try
         {
             var progress = new Progress<InstallProgress>(p => { if (ReferenceEquals(_work, token) && (CurrentProgress?.FilesDone ?? 0) <= p.FilesDone) CurrentProgress = p; });
+            var javaPath = Active.JavaPath;
             await Task.Run(() => recipe is null ? _installer.InstallAsync(root, entry, progress, token.Token) :
-                _loaderInstaller.InstallAsync(root, recipe, progress, token.Token), token.Token);
+                _loaderInstaller.InstallAsync(root, recipe, progress, token.Token, javaPath), token.Token);
             DownloadStateKey = "InstallComplete";
             if (CurrentProgress is { } current) CurrentProgress = new InstallProgress(current.FilesTotal, current.FilesTotal, 0, 0);
             _localVersions = await ReadInstalledAsync(root);

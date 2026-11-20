@@ -5,6 +5,8 @@ namespace CubicLauncher.Launcher.Java;
 
 public sealed record JavaRuntime(string Executable, string Version, int MajorVersion, string? Architecture);
 
+public sealed class JavaNotFoundException(string message) : InvalidOperationException(message);
+
 public sealed partial class JavaDetector
 {
     [GeneratedRegex("version\\s+\"(?<version>[^\"]+)\"")]
@@ -36,12 +38,12 @@ public sealed partial class JavaDetector
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or TimeoutException or InvalidOperationException or System.ComponentModel.Win32Exception) { }
         }
-        throw new InvalidOperationException(required is int major
+        throw new JavaNotFoundException(required is int major
             ? $"Java {major} was not found. Install it or choose its executable in Profiles. Found: {(found.Count == 0 ? "none" : string.Join(", ", found.Order()))}."
             : "Java was not found. Install Java or choose its executable in Profiles.");
     }
 
-    private static bool MatchesArchitecture(JavaRuntime runtime, string? architecture) => architecture switch
+    internal static bool MatchesArchitecture(JavaRuntime runtime, string? architecture) => architecture switch
     {
         null => true,
         "aarch64" => runtime.Architecture is "aarch64" or "arm64",

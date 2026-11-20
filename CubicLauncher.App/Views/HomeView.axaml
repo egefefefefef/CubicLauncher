@@ -46,6 +46,7 @@
                     <TextBlock Text="{Binding PrimaryLabel}" />
                   </StackPanel>
                 </Button>
+                <Button Classes="quiet" Foreground="White" Content="{Binding L[Cancel]}" Command="{Binding CancelLaunchCommand}" IsVisible="{Binding IsLaunching}" />
                 <Border VerticalAlignment="Center" CornerRadius="7" Padding="10,8" Background="#98202035" BorderBrush="#5E7A7397" BorderThickness="1">
                   <StackPanel Orientation="Horizontal" Spacing="6">
                     <PathIcon Data="{StaticResource LayersIcon}" Foreground="#DCCFFF" Width="13" Height="13" />

@@ -40,6 +40,8 @@ internal static class Program
         collection.AddSingleton<LoaderInstaller>();
         collection.AddSingleton<MicrosoftSignIn>();
         collection.AddSingleton<JavaDetector>();
+        collection.AddSingleton<JavaProvisioner>();
+        collection.AddSingleton<ForgeInstaller>();
         collection.AddSingleton<MinecraftRunner>();
         collection.AddSingleton<ShellViewModel>();
         using var provider = collection.BuildServiceProvider();

@@ -5,6 +5,11 @@ on:
     tags: ['v*']
   pull_request:
   workflow_dispatch:
+    inputs:
+      live_installs:
+        description: Verify official Java, Forge and NeoForge installation on Linux (uses network)
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -39,6 +44,20 @@ jobs:
           echo "PACKAGE_VERSION=$version" >> "$GITHUB_ENV"
       - run: dotnet build CubicLauncher.sln -c Release -p:Version=${{ env.PACKAGE_VERSION }}
       - run: dotnet test CubicLauncher.sln -c Release --no-build --logger trx
+      - name: Smoke-test live downloads and loader installations
+        if: runner.os == 'Linux' && inputs.live_installs
+        shell: bash
+        env:
+          CUBICLAUNCHER_TEST_LIVE: '1'
+        run: |
+          if ! dotnet test CubicLauncher.sln -c Release --no-build --filter FullyQualifiedName~LiveInstallSmokeTests --logger 'console;verbosity=normal' > live-installs.log 2>&1; then
+            cat live-installs.log
+            detail=$(grep -m1 -E '^[[:space:]]*(System\.|Xunit\.|Assert\.)' live-installs.log || true)
+            detail=${detail//%/%25}
+            printf '::error title=Live installer smoke test failed::%s\n' "${detail:-See the live smoke-test log.}"
+            exit 1
+          fi
+          cat live-installs.log
       - run: dotnet publish CubicLauncher.App -c Release -r ${{ matrix.rid }} --self-contained -p:Version=${{ env.PACKAGE_VERSION }} -o build/publish
       - name: Verify packaged executable name
         shell: bash

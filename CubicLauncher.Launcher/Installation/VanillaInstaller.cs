@@ -6,7 +6,7 @@ using CubicLauncher.Launcher.VersionManager;
 
 namespace CubicLauncher.Launcher.Installation;
 
-public sealed record InstallProgress(int FilesDone, int FilesTotal, long BytesRemaining, double BytesPerSecond)
+public sealed record InstallProgress(int FilesDone, int FilesTotal, long BytesRemaining, double BytesPerSecond, string? Phase = null)
 {
     public double Percent => FilesTotal > 0 ? 100.0 * FilesDone / FilesTotal : 0;
 }
