@@ -31,16 +31,17 @@ public sealed partial class ShellViewModel : ObservableObject
     private readonly VanillaInstaller _installer;
     private readonly MicrosoftSignIn _signIn;
     private readonly JavaDetector _java;
+    private readonly JavaProvisioner _javaProvisioner;
     private readonly MinecraftRunner _runner;
     private readonly ILogger<ShellViewModel> _logger;
     private readonly CancellationTokenSource _lifetime = new();
     private LauncherState _state = LauncherState.CreateDefault();
 
     public ShellViewModel(ILauncherStateStore store, LauncherPaths paths, DesktopFiles desktop, MojangVersionCatalog catalog,
-        VanillaInstaller installer, MicrosoftSignIn signIn, JavaDetector java, MinecraftRunner runner,
+        VanillaInstaller installer, MicrosoftSignIn signIn, JavaDetector java, JavaProvisioner javaProvisioner, MinecraftRunner runner,
         StartupRegistration startup, ProtectedCredentials credentials, LoaderCatalog loaderCatalog, LoaderInstaller loaderInstaller, ILogger<ShellViewModel> logger)
     {
-        (_loaderCatalog, _loaderInstaller) = (loaderCatalog, loaderInstaller);
+        (_loaderCatalog, _loaderInstaller, _javaProvisioner) = (loaderCatalog, loaderInstaller, javaProvisioner);
         (_store, _paths, _desktop, _catalog, _installer, _signIn, _java, _runner, _startup, _credentials, _logger) =
             (store, paths, desktop, catalog, installer, signIn, java, runner, startup, credentials, logger);
     }

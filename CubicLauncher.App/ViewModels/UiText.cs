@@ -71,7 +71,7 @@ public sealed class UiText(string language)
         ["Reset"] = ("Reset", "Сбросить"),
         ["GameFolder"] = ("Game directory", "Папка игры"),
         ["JavaPerformance"] = ("JAVA & PERFORMANCE", "JAVA И ПРОИЗВОДИТЕЛЬНОСТЬ"),
-        ["JavaHelp"] = ("Leave the executable blank to detect Java automatically. The game version determines the required Java major version.", "Оставьте поле пустым для автоматического поиска Java. Требуемая версия Java зависит от версии игры."),
+        ["JavaHelp"] = ("Leave this blank to detect the right Java automatically and download it from Mojang if needed.", "Оставьте поле пустым, чтобы подобрать Java для игры и при необходимости скачать её у Mojang."),
         ["Automatic"] = ("Automatic detection", "Автоматическое обнаружение"),
         ["Browse"] = ("Browse…", "Обзор…"),
         ["ChooseJava"] = ("Choose the Java executable", "Выбрать исполняемый файл Java"),
@@ -148,6 +148,11 @@ public sealed class UiText(string language)
         ["LoaderNone"] = ("No compatible {0} Loader was found for Minecraft {1}.", "Не найден совместимый {0} Loader для Minecraft {1}."),
         ["ProfileVersion"] = ("MINECRAFT VERSION", "ВЕРСИЯ MINECRAFT"),
         ["EmptyCatalog"] = ("No versions found. Try a different filter or refresh the catalog.", "Версии не найдены. Измените фильтр или обновите каталог."),
+        ["JavaWillInstall"] = ("No compatible Java was found. The launcher will look for a Mojang runtime when needed.", "Совместимая Java не найдена. Лаунчер подберёт рантайм Mojang, когда он понадобится."),
+        ["JavaInstallProgress"] = ("Preparing compatible Java…", "Подготовка совместимой Java…"),
+        ["JavaInstallFiles"] = ("Installing Java: {0}/{1} files", "Установка Java: {0}/{1} файлов"),
+        ["ForgeInstallProgress"] = ("Running the official mod loader installer…", "Работает официальный установщик загрузчика модов…"),
+        ["LaunchCancelled"] = ("Launch cancelled.", "Запуск отменён."),
         ["OpenGameLog"] = ("Open latest game log", "Открыть последний журнал игры"),
     };
 

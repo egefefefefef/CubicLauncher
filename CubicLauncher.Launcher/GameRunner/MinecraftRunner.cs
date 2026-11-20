@@ -11,10 +11,10 @@ namespace CubicLauncher.Launcher.GameRunner;
 
 public sealed record GameResult(int ExitCode, string LogFile);
 
-public sealed class MinecraftRunner(JavaDetector java, VanillaInstaller installer, ILogger<MinecraftRunner> logger)
+public sealed class MinecraftRunner(JavaProvisioner java, VanillaInstaller installer, ILogger<MinecraftRunner> logger)
 {
     public async Task<GameResult> RunAsync(string root, string version, PlayerProfile profile, MinecraftSession session,
-        IProgress<int> starting, CancellationToken token)
+        IProgress<int> starting, CancellationToken token, IProgress<JavaProgress>? javaProgress = null)
     {
         if (!installer.IsInstalled(root, version)) throw new InvalidOperationException("Install this Minecraft version first.");
         if (session.ExpiresAt <= DateTimeOffset.UtcNow) throw new InvalidOperationException("Microsoft sign-in expired. Sign in again.");
@@ -26,7 +26,7 @@ public sealed class MinecraftRunner(JavaDetector java, VanillaInstaller installe
             !await VerifiedDownloader.FileMatchesAsync(client, clientJar, token).ConfigureAwait(false))
             throw new InvalidDataException("Minecraft's client failed verification. Select Verify / repair in Versions.");
         var platform = MinecraftPlatform.Current;
-        var javaRuntime = await java.FindAsync(profile.JavaPath, metadata.JavaVersion?.MajorVersion ?? 8, token, platform.Architecture).ConfigureAwait(false);
+        var javaRuntime = await java.EnsureAsync(root, profile.JavaPath, metadata.JavaVersion ?? new JavaRequirement(8), javaProgress, token).ConfigureAwait(false);
         var instance = profile.GameDirectory(root);
         Directory.CreateDirectory(instance);
         var assetsRoot = Path.Combine(root, "assets");

@@ -68,6 +68,8 @@
                 <WrapPanel ItemSpacing="7" LineSpacing="6">
                   <Button Content="Fabric" Command="{Binding FindLoadersCommand}" CommandParameter="Fabric" />
                   <Button Content="Quilt" Command="{Binding FindLoadersCommand}" CommandParameter="Quilt" />
+                  <Button Content="Forge" Command="{Binding FindLoadersCommand}" CommandParameter="Forge" />
+                  <Button Content="NeoForge" Command="{Binding FindLoadersCommand}" CommandParameter="NeoForge" />
                 </WrapPanel>
                 <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoadingLoaders}" Height="3" />
                 <TextBlock Classes="caption muted" Text="{Binding LoaderHint}" TextWrapping="Wrap" />

@@ -4,6 +4,9 @@ using CommunityToolkit.Mvvm.Input;
 using CubicLauncher.App.Services;
 using CubicLauncher.Core.Models;
 using CubicLauncher.Launcher.GameRunner;
+using CubicLauncher.Launcher.Installation;
+using CubicLauncher.Launcher.Java;
+using CubicLauncher.Launcher.VersionManager;
 
 namespace CubicLauncher.App.ViewModels;
 
@@ -155,13 +158,31 @@ public sealed partial class ShellViewModel
     [RelayCommand]
     private async Task CheckJavaAsync()
     {
+        var selected = SelectedProfile;
+        var explicitPath = Optional(JavaInput);
+        var root = GameRoot;
         try
         {
             JavaInfo = L["CheckingJava"];
-            var runtime = await _java.FindAsync(JavaInput, null, _lifetime.Token);
-            JavaInfo = $"Java {runtime.Version} • {runtime.Architecture}\n{runtime.Executable}";
+            var token = _lifetime.Token;
+            JavaRequirement? requirement = null;
+            if (selected?.VersionId is { } version && _installer.IsInstalled(root, version))
+            {
+                var metadata = await VanillaInstaller.ReadAsync<VersionMetadata>(InstallPaths.MetadataFile(root, version), token);
+                requirement = metadata.JavaVersion ?? new JavaRequirement(8);
+            }
+            JavaRuntime? runtime = null;
+            if (explicitPath is null && requirement is not null)
+                runtime = await _javaProvisioner.FindInstalledAsync(root, requirement, token);
+            runtime ??= await _java.FindAsync(explicitPath, requirement?.MajorVersion, token, MinecraftPlatform.Current.Architecture);
+            if (SelectedProfile == selected) JavaInfo = $"Java {runtime.Version} • {runtime.Architecture}\n{runtime.Executable}";
         }
-        catch (Exception ex) { JavaInfo = null; ShowError(ex); }
+        catch (JavaNotFoundException) when (explicitPath is null)
+        {
+            if (SelectedProfile == selected) JavaInfo = L["JavaWillInstall"];
+        }
+        catch (OperationCanceledException) when (_lifetime.IsCancellationRequested) { }
+        catch (Exception ex) { if (SelectedProfile == selected) { JavaInfo = null; ShowError(ex); } }
     }
 
     private static bool ValidNumber(decimal? value, int lower, int upper) => value is decimal number &&

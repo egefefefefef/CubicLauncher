@@ -1,3 +1,4 @@
+using CubicLauncher.Launcher.Java;
 using Microsoft.Extensions.Logging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -123,17 +124,31 @@ public sealed partial class ShellViewModel
             var started = new Progress<int>(_ =>
             {
                 if (!ReferenceEquals(_work, token)) return;
+                Message = null;
                 IsLaunching = false;
                 IsGameRunning = true;
                 _desktop.ApplyLaunchBehavior(_state.Settings.AfterLaunch);
             });
-            var result = await Task.Run(() => _runner.RunAsync(root, version, profile, session, started, token.Token), token.Token);
+            var javaProgress = new Progress<JavaProgress>(p =>
+            {
+                if (!ReferenceEquals(_work, token) || !IsLaunching || token.IsCancellationRequested) return;
+                Message = p.FilesTotal > 0 ? L.Format("JavaInstallFiles", p.FilesReady, p.FilesTotal) : L["JavaInstallProgress"];
+            });
+            var result = await Task.Run(() => _runner.RunAsync(root, version, profile, session, started, token.Token, javaProgress), token.Token);
             LastGameLog = result.LogFile;
             Message = result.ExitCode == 0 ? L["GameExited"] : L.Format("GameError", result.ExitCode);
         }
         catch (OperationCanceledException) when (token.IsCancellationRequested) { }
         catch (Exception ex) { ShowError(ex); }
         finally { _work = null; IsLaunching = false; IsGameRunning = false; NotifyWork(); _desktop.CompleteGame(); }
+    }
+
+    [RelayCommand]
+    private void CancelLaunch()
+    {
+        if (!IsLaunching) return;
+        _work?.Cancel();
+        Message = L["LaunchCancelled"];
     }
 
     [RelayCommand]
