@@ -1,0 +1,2 @@
+# CubicLauncher
+Minecraft launcher
