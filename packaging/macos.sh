@@ -24,7 +24,7 @@ cp packaging/Info.plist "$app/Contents/Info.plist"
 
 phase='verify app executable'
 test -x "$app/Contents/MacOS/CubicLauncher"
-lipo -verify_arch "$architecture" "$app/Contents/MacOS/CubicLauncher"
+lipo "$app/Contents/MacOS/CubicLauncher" -verify_arch "$architecture"
 
 phase='build app icon'
 icons="$stage/CubicLauncher.iconset"
