@@ -148,6 +148,7 @@ public sealed class UiText(string language)
         ["LoaderNone"] = ("No compatible {0} Loader was found for Minecraft {1}.", "Не найден совместимый {0} Loader для Minecraft {1}."),
         ["ProfileVersion"] = ("MINECRAFT VERSION", "ВЕРСИЯ MINECRAFT"),
         ["EmptyCatalog"] = ("No versions found. Try a different filter or refresh the catalog.", "Версии не найдены. Измените фильтр или обновите каталог."),
+        ["JavaWillInstall"] = ("No compatible Java was found. The launcher will look for a Mojang runtime when needed.", "Совместимая Java не найдена. Лаунчер подберёт рантайм Mojang, когда он понадобится."),
         ["JavaInstallProgress"] = ("Preparing compatible Java…", "Подготовка совместимой Java…"),
         ["JavaInstallFiles"] = ("Installing Java: {0}/{1} files", "Установка Java: {0}/{1} файлов"),
         ["ForgeInstallProgress"] = ("Running the official mod loader installer…", "Работает официальный установщик загрузчика модов…"),

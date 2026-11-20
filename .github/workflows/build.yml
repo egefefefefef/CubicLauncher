@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       live_installs:
-        description: Verify official Java, Forge and NeoForge installation on Linux (uses network)
+        description: Verify Java on all platforms and Forge/NeoForge on Linux (uses network)
         type: boolean
         default: false
 
@@ -45,7 +45,7 @@ jobs:
       - run: dotnet build CubicLauncher.sln -c Release -p:Version=${{ env.PACKAGE_VERSION }}
       - run: dotnet test CubicLauncher.sln -c Release --no-build --logger trx
       - name: Smoke-test live downloads and loader installations
-        if: runner.os == 'Linux' && inputs.live_installs
+        if: inputs.live_installs
         shell: bash
         env:
           CUBICLAUNCHER_TEST_LIVE: '1'
