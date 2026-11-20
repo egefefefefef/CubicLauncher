@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsTestProject>true</IsTestProject>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../CubicLauncher.App/CubicLauncher.App.csproj" />
+    <ProjectReference Include="../CubicLauncher.Core/CubicLauncher.Core.csproj" />
+    <ProjectReference Include="../CubicLauncher.Infrastructure/CubicLauncher.Infrastructure.csproj" />
+    <ProjectReference Include="../CubicLauncher.Launcher/CubicLauncher.Launcher.csproj" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="Avalonia.Headless.XUnit" />
+    <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

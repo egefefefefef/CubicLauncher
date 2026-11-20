@@ -1,4 +1,4 @@
-name: Build, test and package
+name: Build CubicLauncher
 on:
   push:
     branches: ['**']
@@ -37,15 +37,21 @@ jobs:
           if [[ "$GITHUB_REF_TYPE" == tag ]]; then version=${GITHUB_REF_NAME#v}; fi
           [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
           echo "PACKAGE_VERSION=$version" >> "$GITHUB_ENV"
-      - run: dotnet build VoxelNest.sln -c Release -p:Version=${{ env.PACKAGE_VERSION }}
-      - run: dotnet test VoxelNest.sln -c Release --no-build --logger trx
-      - run: dotnet publish VoxelNest.App -c Release -r ${{ matrix.rid }} --self-contained -p:Version=${{ env.PACKAGE_VERSION }} -o build/publish
+      - run: dotnet build CubicLauncher.sln -c Release -p:Version=${{ env.PACKAGE_VERSION }}
+      - run: dotnet test CubicLauncher.sln -c Release --no-build --logger trx
+      - run: dotnet publish CubicLauncher.App -c Release -r ${{ matrix.rid }} --self-contained -p:Version=${{ env.PACKAGE_VERSION }} -o build/publish
+      - name: Verify packaged executable name
+        shell: bash
+        run: |
+          executable=CubicLauncher
+          if [[ "$RUNNER_OS" == Windows ]]; then executable+=.exe; fi
+          test -f "build/publish/$executable"
       - if: runner.os == 'Windows'
         name: Windows installer and portable ZIP
         shell: pwsh
         run: |
           New-Item artifacts -ItemType Directory -Force | Out-Null
-          Compress-Archive -Path build/publish/* -DestinationPath artifacts/VoxelNest-win-x64-portable.zip
+          Compress-Archive -Path build/publish/* -DestinationPath artifacts/CubicLauncher-win-x64-portable.zip
           $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
           if (!(Test-Path $iscc)) {
             choco install innosetup --yes --no-progress
@@ -57,13 +63,13 @@ jobs:
         name: Linux tar.gz
         run: |
           mkdir -p artifacts
-          tar -czf artifacts/VoxelNest-linux-x64.tar.gz --transform='s,^publish,VoxelNest,' -C build publish
+          tar -czf artifacts/CubicLauncher-linux-x64.tar.gz --transform='s,^publish,CubicLauncher,' -C build publish
       - if: runner.os == 'macOS'
         name: macOS DMG
         run: bash packaging/macos.sh build/publish ${{ matrix.rid }} "$PACKAGE_VERSION"
       - uses: actions/upload-artifact@v4
         with:
-          name: VoxelNest-${{ matrix.rid }}
+          name: CubicLauncher-${{ matrix.rid }}
           path: artifacts/*
           if-no-files-found: error
 
@@ -79,11 +85,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          pattern: VoxelNest-*
+          pattern: CubicLauncher-*
           path: artifacts
           merge-multiple: true
       - name: Publish release with checksums
         shell: bash
         run: |
-          (cd artifacts && sha256sum -- VoxelNest-* > SHA256SUMS.txt)
+          (cd artifacts && sha256sum -- CubicLauncher-* > SHA256SUMS.txt)
           gh release create "$GITHUB_REF_NAME" --verify-tag --generate-notes artifacts/*

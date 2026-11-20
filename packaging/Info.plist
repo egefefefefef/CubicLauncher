@@ -2,11 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <key>CFBundleName</key><string>VoxelNest Launcher</string>
-  <key>CFBundleDisplayName</key><string>VoxelNest Launcher</string>
+  <key>CFBundleName</key><string>CubicLauncher</string>
+  <key>CFBundleDisplayName</key><string>CubicLauncher</string>
   <key>CFBundleIdentifier</key><string>app.voxelnest.launcher</string>
-  <key>CFBundleExecutable</key><string>VoxelNest</string>
-  <key>CFBundleIconFile</key><string>VoxelNest.icns</string>
+  <key>CFBundleExecutable</key><string>CubicLauncher</string>
+  <key>CFBundleIconFile</key><string>CubicLauncher.icns</string>
   <key>CFBundlePackageType</key><string>APPL</string>
   <key>CFBundleVersion</key><string>0.1.0</string>
   <key>CFBundleShortVersionString</key><string>0.1.0</string>
